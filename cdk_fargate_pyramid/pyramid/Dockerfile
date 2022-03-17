@@ -18,12 +18,12 @@ RUN python -m pip install --upgrade pip
 
 WORKDIR /app
 
-RUN git clone https://github.com/IGVF-DACC/igvfd.git --branch dev
+RUN git clone https://github.com/IGVF-DACC/igvfd.git --branch cdk-fargate
 
 WORKDIR /app/igvfd
 
 RUN pip install -e .
 
-EXPOSE 6543
+EXPOSE 80
 
 CMD ["pserve", "./config/pyramid/ini/local.ini"]
