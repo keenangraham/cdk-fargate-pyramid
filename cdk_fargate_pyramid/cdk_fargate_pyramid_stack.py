@@ -54,12 +54,7 @@ class CdkFargatePyramidStack(cdk.Stack):
             allocated_storage=10,
             max_allocated_storage=20,
             security_groups=[
-                SecurityGroup.from_security_group_id(
-                    self,
-                    'encd_sg',
-                    'sg-022ea667',
-                    mutable=False
-                ),
+                security_group,
             ],
         )
         application_image = ContainerImage.from_asset(
@@ -74,7 +69,7 @@ class CdkFargatePyramidStack(cdk.Stack):
             task_image_options=ApplicationLoadBalancedTaskImageOptions(
                 image=application_image,
                 environment={
-                    'SQLALCHEMY_URL': database.instance_endpoint,
+                    'SQLALCHEMY_URL': database.instance_endpoint.hostname,
                 }
             ),
             memory_limit_mib=2048,
