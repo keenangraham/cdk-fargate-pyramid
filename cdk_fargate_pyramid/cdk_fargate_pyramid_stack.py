@@ -1,5 +1,7 @@
 import aws_cdk as cdk
 
+from aws_cdk.aws_certificatemanager import Certificate
+
 from aws_cdk.aws_ec2 import SecurityGroup
 from aws_cdk.aws_ec2 import InstanceType
 from aws_cdk.aws_ec2 import InstanceClass
@@ -87,6 +89,11 @@ class CdkFargatePyramidStack(cdk.Stack):
                 security_group,
             ],
             assign_public_ip=True,
+            certificate=Certificate.from_certificate_arn(
+                self,
+                'DomainCertificate',
+                'arn:aws:acm:us-west-2:618537831167:certificate/6e16fc50-1206-48fa-b14a-13d97cb1fee6'
+            ),
         )
         fargate_service.target_group.configure_health_check(
             interval=cdk.Duration.seconds(60),
