@@ -61,9 +61,6 @@ class CdkFargatePyramidStack(cdk.Stack):
         application_image = ContainerImage.from_asset(
             'cdk_fargate_pyramid/pyramid/'
         )
-        sqlalchemy_url = (
-            f'postgresql://{database.instance_endpoint.hostname}/igvfd'
-        )
         fargate_service = ApplicationLoadBalancedFargateService(
             self,
             'TestFargatePyramidApp',
@@ -73,7 +70,7 @@ class CdkFargatePyramidStack(cdk.Stack):
             task_image_options=ApplicationLoadBalancedTaskImageOptions(
                 image=application_image,
                 environment={
-                    'SQLALCHEMY_URL': sqlalchemy_url
+                    'DB_HOST': database.instance_endpoint.hostname
                 },
                 secrets={
                     'DB_PASSWORD': Secret.from_secrets_manager(
