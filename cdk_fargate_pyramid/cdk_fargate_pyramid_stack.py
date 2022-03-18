@@ -19,6 +19,8 @@ from aws_cdk.aws_rds import DatabaseInstance
 from aws_cdk.aws_rds import DatabaseInstanceEngine
 from aws_cdk.aws_rds import PostgresEngineVersion
 
+from aws_cdk.aws_route53 import HostedZone
+
 from constructs import Construct
 
 from shared_infrastructure.cherry_lab.vpcs import VPCs
@@ -94,6 +96,12 @@ class CdkFargatePyramidStack(cdk.Stack):
                 'DomainCertificate',
                 'arn:aws:acm:us-west-2:618537831167:certificate/6e16fc50-1206-48fa-b14a-13d97cb1fee6'
             ),
+            domain_zone=HostedZone.from_lookup(
+                self,
+                'DomainZone',
+                domain_name='api.encodedcc.org'
+            ),
+            domain_name='igvfd-local.api.encodedcc.org'
         )
         fargate_service.target_group.configure_health_check(
             interval=cdk.Duration.seconds(60),
