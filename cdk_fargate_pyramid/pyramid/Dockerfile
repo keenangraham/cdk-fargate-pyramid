@@ -36,4 +36,8 @@ RUN pip install -e .
 
 EXPOSE 80
 
-CMD ["pserve", "./config/pyramid/ini/fargate.ini"]
+COPY run.sh ./
+
+RUN chmod +x run.sh
+
+CMD ["run.sh"]
