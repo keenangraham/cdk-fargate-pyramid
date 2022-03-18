@@ -26,11 +26,11 @@ ENV GH_USER=IGVF-DACC
 
 ENV GH_REPO=igvfd
 
-ADD https://api.github.com/repos/$GH_USER/$GH_REPO/git/refs/heads/$GH_BRANCH gh_version.json
-
 RUN git clone -b $GH_BRANCH https://github.com/$GH_USER/$GH_REPO.git
 
 WORKDIR /app/igvfd
+
+RUN git rev-parse HEAD > bracnh_sha.txt
 
 RUN pip install -e .
 
