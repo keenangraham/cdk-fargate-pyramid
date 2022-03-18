@@ -18,8 +18,6 @@ RUN python -m pip install --upgrade pip
 
 WORKDIR /app
 
-RUN echo "nocache"
-
 ENV GH_BRANCH=cdk-fargate
 
 ENV GH_USER=IGVF-DACC
@@ -42,4 +40,4 @@ COPY run.sh ./
 
 RUN chmod +x run.sh
 
-CMD ["./run.sh"]
+CMD exec ./run.sh
