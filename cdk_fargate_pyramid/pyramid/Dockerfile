@@ -26,4 +26,4 @@ RUN pip install -e .
 
 EXPOSE 80
 
-CMD ["pserve", "./config/pyramid/ini/faragate.ini"]
+CMD ["pserve", "./config/pyramid/ini/fargate.ini"]
