@@ -40,4 +40,4 @@ COPY run.sh ./
 
 RUN chmod +x run.sh
 
-CMD exec ./run.sh
+CMD ["./run.sh"]
