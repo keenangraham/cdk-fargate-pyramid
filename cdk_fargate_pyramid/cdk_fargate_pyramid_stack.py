@@ -8,6 +8,7 @@ from aws_cdk.aws_ec2 import SubnetSelection
 from aws_cdk.aws_ec2 import SubnetType
 
 from aws_cdk.aws_ecs import ContainerImage
+from aws_cdk.aws_ecs import Secret
 
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedFargateService
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedTaskImageOptions
@@ -73,7 +74,13 @@ class CdkFargatePyramidStack(cdk.Stack):
                 image=application_image,
                 environment={
                     'SQLALCHEMY_URL': sqlalchemy_url
-                }
+                },
+                secrets={
+                    'DB_PASSWORD': Secret.from_secrets_manager(
+                        database.secret,
+                        'password'
+                    ),
+                },
             ),
             memory_limit_mib=2048,
             public_load_balancer=True,
