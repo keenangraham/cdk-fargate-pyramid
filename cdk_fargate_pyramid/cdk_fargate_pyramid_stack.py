@@ -39,10 +39,11 @@ class CdkFargatePyramidStack(cdk.Stack):
         engine = DatabaseInstanceEngine.postgres(
             version=PostgresEngineVersion.VER_14_1
         )
+        database_name = 'igvfd'
         database = DatabaseInstance(
             self,
             'TestFargatePyramidAppPostgres',
-            database_name='igvfd',
+            database_name=database_name,
             engine=engine,
             instance_type=InstanceType.of(
                 InstanceClass.BURSTABLE3,
@@ -70,7 +71,8 @@ class CdkFargatePyramidStack(cdk.Stack):
             task_image_options=ApplicationLoadBalancedTaskImageOptions(
                 image=application_image,
                 environment={
-                    'DB_HOST': database.instance_endpoint.hostname
+                    'DB_HOST': database.instance_endpoint.hostname,
+                    'DB_NAME': database_name,
                 },
                 secrets={
                     'DB_PASSWORD': Secret.from_secrets_manager(
