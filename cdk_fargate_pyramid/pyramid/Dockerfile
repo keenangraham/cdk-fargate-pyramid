@@ -8,7 +8,7 @@ ENV VIRTUAL_ENV=/opt/venv
 
 RUN apt-get update
 
-RUN apt-get install -y make git graphviz curl
+RUN apt-get install -y make git curl graphviz
 
 RUN python -m venv $VIRTUAL_ENV
 
@@ -18,7 +18,17 @@ RUN python -m pip install --upgrade pip
 
 WORKDIR /app
 
-RUN git clone https://github.com/IGVF-DACC/igvfd.git --branch cdk-fargate
+RUN echo "nocache"
+
+ENV GH_BRANCH=cdk-fargate
+
+ENV GH_USER=IGVF-DACC
+
+ENV GH_REPO=igvfd
+
+ADD https://api.github.com/repos/$GH_USER/$GH_REPO/git/refs/heads/$GH_BRANCH gh_version.json
+
+RUN git clone -b $GH_BRANCH https://github.com/$GH_USER/$GH_REPO.git
 
 WORKDIR /app/igvfd
 
