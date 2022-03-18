@@ -9,7 +9,7 @@ app = cdk.App()
 
 CdkFargatePyramidStack(
     app,
-    'CdkFargatePyramidStack2',
+    'CdkFargatePyramidStack',
     env=US_WEST_2,
 )
 
