@@ -106,6 +106,12 @@ class CdkFargatePyramidStack(cdk.Stack):
         fargate_service.target_group.configure_health_check(
             interval=cdk.Duration.seconds(60),
         )
+        cdk.Tags.of(fargate_service).add(
+            'test',
+            'tag'
+        )
+        cfn_service = fargate_service.service.node.default_child
+        cfn_service.enable_execute_command = True
         scalable_task = fargate_service.service.auto_scale_task_count(
             max_capacity=4,
         )
