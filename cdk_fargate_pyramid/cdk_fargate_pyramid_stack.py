@@ -15,6 +15,8 @@ from aws_cdk.aws_ecs import Secret
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedFargateService
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedTaskImageOptions
 
+from aws_cdk.aws_iam import ManagedPolicy
+
 from aws_cdk.aws_rds import DatabaseInstance
 from aws_cdk.aws_rds import DatabaseInstanceEngine
 from aws_cdk.aws_rds import PostgresEngineVersion
@@ -108,7 +110,12 @@ class CdkFargatePyramidStack(cdk.Stack):
         )
         cdk.Tags.of(fargate_service).add(
             'test',
-            'tag'
+            'pyramid stack'
+        )
+        fargate_service.task_definition.task_role.add_managed_policy(
+            ManagedPolicy.from_aws_managed_policy_name(
+                'AmazonSSMManagedInstanceCore'
+            )
         )
         cfn_service = fargate_service.service.node.default_child
         cfn_service.enable_execute_command = True
