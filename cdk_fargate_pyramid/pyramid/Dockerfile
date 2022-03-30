@@ -40,4 +40,8 @@ COPY run.sh ./
 
 RUN chmod +x run.sh
 
+COPY bootstrap.sh ./
+
+RUN chmod +x bootstrap.sh
+
 CMD ["./run.sh"]
