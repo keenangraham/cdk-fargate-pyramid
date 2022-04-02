@@ -9,10 +9,12 @@ from aws_cdk.aws_ec2 import InstanceSize
 from aws_cdk.aws_ec2 import SubnetSelection
 from aws_cdk.aws_ec2 import SubnetType
 
+from aws_cdk.aws_ecs import AwsLogDriverMode
 from aws_cdk.aws_ecs import ContainerImage
+from aws_cdk.aws_ecs import DeploymentCircuitBreaker
 from aws_cdk.aws_ecs import Secret
 from aws_cdk.aws_ecs import LogDriver
-from aws_cdk.aws_ecs import AwsLogDriverMode
+
 
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedFargateService
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedTaskImageOptions
@@ -79,6 +81,9 @@ class CdkFargateNginxPyramidStack(cdk.Stack):
             vpc=vpcs.default_vpc,
             cpu=1024,
             desired_count=1,
+            circuit_breaker=DeploymentCircuitBreaker(
+                rollback=True,
+            ),
             task_image_options=ApplicationLoadBalancedTaskImageOptions(
                 container_name='nginx',
                 image=nginx_image,
