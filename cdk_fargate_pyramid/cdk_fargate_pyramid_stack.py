@@ -81,7 +81,7 @@ class CdkFargatePyramidStack(cdk.Stack):
             task_image_options=ApplicationLoadBalancedTaskImageOptions(
                 container_name='nginx',
                 image=nginx_image,
-                logging=LogDriver.aws_logs(
+                log_driver=LogDriver.aws_logs(
                     stream_prefix='nginx'
                 ),
             ),
