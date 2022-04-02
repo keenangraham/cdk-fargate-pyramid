@@ -29,7 +29,7 @@ from constructs import Construct
 from shared_infrastructure.cherry_lab.vpcs import VPCs
 
 
-class CdkFargatePyramidStack(cdk.Stack):
+class CdkFargateNginxPyramidStack(cdk.Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
