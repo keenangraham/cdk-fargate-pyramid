@@ -11,6 +11,7 @@ from aws_cdk.aws_ec2 import SubnetType
 
 from aws_cdk.aws_ecs import ContainerImage
 from aws_cdk.aws_ecs import Secret
+from aws_cdk.aws_ecs import LogDriver
 
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedFargateService
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedTaskImageOptions
@@ -99,6 +100,9 @@ class CdkFargatePyramidStack(cdk.Stack):
             ),
             domain_name='igvfd-local.api.encodedcc.org',
             redirect_http=True,
+            logging=LogDriver.aws_logs(
+                stream_prefix='nginx'
+            ),
         )
         application_container = fargate_service.task_definition.add_container(
             'ApplicationContainer',
@@ -114,6 +118,9 @@ class CdkFargatePyramidStack(cdk.Stack):
                     'password'
                 ),
             },
+            logging=LogDriver.aws_logs(
+                stream_prefix='pyramid'
+            ),
         )
         fargate_service.target_group.configure_health_check(
             interval=cdk.Duration.seconds(60),
