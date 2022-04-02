@@ -73,11 +73,12 @@ class CdkFargatePyramidStack(cdk.Stack):
         )
         fargate_service = ApplicationLoadBalancedFargateService(
             self,
-            'TestFargatePyramidApp',
+            'TestFargateNginxPyramidApp',
             vpc=vpcs.default_vpc,
             cpu=1024,
             desired_count=1,
             task_image_options=ApplicationLoadBalancedTaskImageOptions(
+                container_name='nginx',
                 image=nginx_image,
             ),
             memory_limit_mib=2048,
@@ -96,10 +97,12 @@ class CdkFargatePyramidStack(cdk.Stack):
                 'DomainZone',
                  domain_name='api.encodedcc.org'
             ),
-            domain_name='igvfd-local.api.encodedcc.org'
+            domain_name='igvfd-local.api.encodedcc.org',
+            redirect_http=True,
         )
         application_container = fargate_service.task_definition.add_container(
             'ApplicationContainer',
+            container_name='pyramid',
             image=application_image,
             environment={
                 'DB_HOST': database.instance_endpoint.hostname,
