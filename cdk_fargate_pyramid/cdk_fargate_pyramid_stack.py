@@ -12,6 +12,7 @@ from aws_cdk.aws_ec2 import SubnetType
 from aws_cdk.aws_ecs import ContainerImage
 from aws_cdk.aws_ecs import Secret
 from aws_cdk.aws_ecs import LogDriver
+from aws_cdk.aws_ecs import AwsLogDriverMode
 
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedFargateService
 from aws_cdk.aws_ecs_patterns import ApplicationLoadBalancedTaskImageOptions
@@ -82,7 +83,8 @@ class CdkFargateNginxPyramidStack(cdk.Stack):
                 container_name='nginx',
                 image=nginx_image,
                 log_driver=LogDriver.aws_logs(
-                    stream_prefix='nginx'
+                    stream_prefix='nginx',
+                    mode=AwsLogDriverMode.NON_BLOCKING,
                 ),
             ),
             memory_limit_mib=2048,
@@ -119,7 +121,8 @@ class CdkFargateNginxPyramidStack(cdk.Stack):
                 ),
             },
             logging=LogDriver.aws_logs(
-                stream_prefix='pyramid'
+                stream_prefix='pyramid',
+                mode=AwsLogDriverMode.NON_BLOCKING,
             ),
         )
         fargate_service.target_group.configure_health_check(
