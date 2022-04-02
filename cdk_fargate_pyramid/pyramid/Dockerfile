@@ -34,7 +34,7 @@ RUN git rev-parse HEAD > branch_sha.txt
 
 RUN pip install -e .
 
-EXPOSE 80
+EXPOSE 6543
 
 COPY run.sh ./
 

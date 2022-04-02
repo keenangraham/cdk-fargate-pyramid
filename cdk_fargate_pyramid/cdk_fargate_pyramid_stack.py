@@ -68,6 +68,9 @@ class CdkFargatePyramidStack(cdk.Stack):
         application_image = ContainerImage.from_asset(
             'cdk_fargate_pyramid/pyramid/'
         )
+        nginx_image = ContainerImage.from_asset(
+            'cdk_fargate_pyramid/nginx/'
+        )
         fargate_service = ApplicationLoadBalancedFargateService(
             self,
             'TestFargatePyramidApp',
@@ -75,17 +78,7 @@ class CdkFargatePyramidStack(cdk.Stack):
             cpu=1024,
             desired_count=1,
             task_image_options=ApplicationLoadBalancedTaskImageOptions(
-                image=application_image,
-                environment={
-                    'DB_HOST': database.instance_endpoint.hostname,
-                    'DB_NAME': database_name,
-                },
-                secrets={
-                    'DB_PASSWORD': Secret.from_secrets_manager(
-                        database.secret,
-                        'password'
-                    ),
-                },
+                image=nginx_image,
             ),
             memory_limit_mib=2048,
             public_load_balancer=True,
@@ -101,9 +94,23 @@ class CdkFargatePyramidStack(cdk.Stack):
             domain_zone=HostedZone.from_lookup(
                 self,
                 'DomainZone',
-                domain_name='api.encodedcc.org'
+                 domain_name='api.encodedcc.org'
             ),
             domain_name='igvfd-local.api.encodedcc.org'
+        )
+        application_container = fargate_service.task_definition.add_container(
+            'ApplicationContainer',
+            image=application_image,
+            environment={
+                'DB_HOST': database.instance_endpoint.hostname,
+                'DB_NAME': database_name,
+            },
+            secrets={
+                'DB_PASSWORD': Secret.from_secrets_manager(
+                    database.secret,
+                    'password'
+                ),
+            },
         )
         fargate_service.target_group.configure_health_check(
             interval=cdk.Duration.seconds(60),
