@@ -81,6 +81,9 @@ class CdkFargatePyramidStack(cdk.Stack):
             task_image_options=ApplicationLoadBalancedTaskImageOptions(
                 container_name='nginx',
                 image=nginx_image,
+                logging=LogDriver.aws_logs(
+                    stream_prefix='nginx'
+                ),
             ),
             memory_limit_mib=2048,
             public_load_balancer=True,
@@ -100,9 +103,6 @@ class CdkFargatePyramidStack(cdk.Stack):
             ),
             domain_name='igvfd-local.api.encodedcc.org',
             redirect_http=True,
-            logging=LogDriver.aws_logs(
-                stream_prefix='nginx'
-            ),
         )
         application_container = fargate_service.task_definition.add_container(
             'ApplicationContainer',
